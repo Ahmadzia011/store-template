@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* Color Tokens from Design System */
+  --color-10: #EEEEF0;
+  --color-11: #FFF963;
+  --color-12: #F8F8F8;
+  --color-1: #131316;
+  --color-3: #5E5F6E;
+  --color-4: #696A78;
+  --color-6: #747686;
+  --color-7: #9394A1;
+  --color-8: #9785FF;
+  --color-5: #6C47FF;
+  --color-9: #D9D9DE;
+  --color-2: #42434D;
+  --color-13: #FFFFFF;
+
+  /* Background */
+  --background: #ffffff;
+  --foreground: #131316;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #fafafa;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  line-height: 1.5;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Color Utilities */
+.text-primary { color: var(--color-1); }
+.text-secondary { color: var(--color-3); }
+.text-tertiary { color: var(--color-6); }
+.text-light { color: var(--color-13); }
+.text-accent { color: var(--color-5); }
+.text-accent-light { color: var(--color-8); }
+
+.bg-primary { background-color: var(--color-1); }
+.bg-secondary { background-color: var(--color-2); }
+.bg-light { background-color: var(--color-12); }
+.bg-accent { background-color: var(--color-5); }
+.bg-accent-light { background-color: var(--color-11); }
+
+.border-light { border-color: var(--color-9); }
+
+/* Shadows */
+.shadow-sm { box-shadow: rgb(147, 148, 161) 0px 0px 0px 1px; }
+.shadow-md { box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 3px -1px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px; }
+.shadow-lg { box-shadow: rgba(0, 0, 0, 0.075) 0px 0px 0px 6px, rgba(0, 0, 0, 0.2) 0px 1px 3px 0px; }
+
+/* Container */
+.container-custom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Section Padding */
+.section-py { padding-top: 5rem; padding-bottom: 5rem; }
+.section-py-sm { padding-top: 3rem; padding-bottom: 3rem; }
+
+/* Transitions */
+.transition-fast { transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+.transition-base { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
