@@ -1,11 +1,10 @@
 'use client';
 
 import { UserButton, useUser } from "@clerk/nextjs";
-import NavBar from "../component/navBar";
+import NavBar from "../component/Navbar";
 
 export default function Home() {
 
-    const { isSignedIn, isLoaded } = useUser()
 
   return ( 
     

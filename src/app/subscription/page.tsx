@@ -3,36 +3,22 @@
 import NavBar from "@/src/component/Navbar";
 import { getCheckOutUrl } from "../actions/fetchCheckOut.actions";
 import { useState } from "react";
-import { CartItem, PRODUCTS } from "@/src/constants/products.constants";
+import { PLANS, CartItem } from "@/src/constants/products.constants";
 
-export default function Products() {
-  const [cart, setCart] = useState<CartItem[]>([]);
+export default function Plans() {
 
-  const addToCart = async (name: string, price: number) => {
-    setCart((prevCart) => {
-      // 1. Check if the product already exists in the previous state array
-      const existingProduct = prevCart.find((item) => item.name === name);
-
-      if (existingProduct) {
-        // 2. If it exists, return a NEW array with the target item's quantity incremented cleanly
-        return prevCart.map((item) =>
-          item.name === name ? { ...item, quantity: item.quantity + 1 } : item,
-        );
-      }
-
-      // 3. If it's a completely new item, append it with quantity 1
-      return [...prevCart, { name, price, quantity: 1 }];
-    });
-  };
-
-  const handleBuy = async () => {
-    console.log("clicked");
+  const handleBuy = async (cart:CartItem[]) => {
     try {
-      const checkOutUrl: string = await getCheckOutUrl(cart, 'payment');
+      const checkOutUrl = await getCheckOutUrl(cart, 'subscription');
 
+      // Add a safety check
+    if (!checkOutUrl) {
+      throw new Error("No checkout URL was returned from the server.");
+    }
       window.location.href = checkOutUrl;
+      
     } catch (e) {
-      console.log("Error while fetching checkout page..");
+      console.error("Error while fetching checkout page..");
     }
   };
 
@@ -45,25 +31,18 @@ export default function Products() {
           <div className="flex justify-between items-center">
             <div className="mb-12 text-center md:text-left">
               <h2 className="text-3xl font-extrabold tracking-tight text-zinc-900">
-                Featured Products
+                Featured Plans
               </h2>
               <p className="text-sm text-zinc-500 mt-2">
                 Engineered tools optimized for precision and daily tactile
                 comfort.
               </p>
             </div>
-            <button
-              style={{ backgroundColor: "#816FFA" }}
-              className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
-              onClick={handleBuy}
-            >
-              {cart.length} Items' CheckOut
-            </button>
           </div>
 
           {/* 3-Product Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {PRODUCTS.map((product) => (
+            {PLANS.map((product) => (
               <div
                 key={product.id}
                 className="flex flex-col justify-between bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-200"
@@ -95,11 +74,17 @@ export default function Products() {
 
                   {/* Secondary Color (#816FFA) applied natively via Tailwind arbitrary values */}
                   <button
-                    onClick={() => addToCart(product.name, product.price)}
+                    onClick={() => {
+                        const prod:CartItem = {
+                            name: product.name,
+                            price: product.price,
+                            quantity: 1
+                        }
+                        handleBuy([prod])}}
                     style={{ backgroundColor: "#816FFA" }}
                     className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
                   >
-                    Add to Cart
+                    Buy Plan
                   </button>
                 </div>
               </div>
