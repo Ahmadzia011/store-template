@@ -1,0 +1,15 @@
+services:
+  database:
+    image: postgres:alpine3.23
+    ports:
+      - 5432
+    volumes:
+      - myvolume:/var/lib/postgresql
+
+    environment:
+       POSTGRES_USER: ${DB_USER}
+       POSTGRES_PASSWORD: ${DB_PASSWORD}
+       POSTGRES_DB: ${DB_NAME}
+
+volumes:
+  myvolume:
