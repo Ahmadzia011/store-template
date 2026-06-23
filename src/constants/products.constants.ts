@@ -5,7 +5,6 @@ interface Product {
   description: string;
 }
 
-
 export const PRODUCTS: Product[] = [
   {
     id: 1,
@@ -56,3 +55,6 @@ export interface CartItem {
   price: number;
   quantity: number;
 }
+
+export const SUCCESS_PAGE = "http://localhost:3000/"
+export const CANCELLATION_PAGE = "http://localhost:3000/cancel"

@@ -1,7 +1,7 @@
 "use server";
 
 import { getStripeKey } from "@/src/lib/stripeInstance";
-import { CartItem } from "@/src/constants/products.constants";
+import { CANCELLATION_PAGE, CartItem, SUCCESS_PAGE } from "@/src/constants/products.constants";
 import Stripe from "stripe";
 
 export async function getCheckOutUrl(
@@ -39,8 +39,8 @@ export async function getCheckOutUrl(
       payment_method_types: ["card"],
       line_items,
       mode,
-      success_url: "http://localhost:3000/",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: SUCCESS_PAGE,
+      cancel_url: CANCELLATION_PAGE,
     });
 
     if (!session.url) {
