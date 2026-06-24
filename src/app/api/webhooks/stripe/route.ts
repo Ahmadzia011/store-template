@@ -1,12 +1,13 @@
-import { getStripeKey } from "@/src/lib/stripeInstance";
+import { getStripe } from "@/src/lib/stripeInstance";
 import { NextRequest, NextResponse } from "next/server";
+import { handleCheckoutSuccess } from "./helpers";
 
 export async function POST(req: NextRequest) {
   let stripe;
   let event;
 
   try {
-    stripe = getStripeKey();
+    stripe = getStripe();
   } catch (e) {
     throw new Error("Failed to load stripe key");
   }
@@ -27,11 +28,13 @@ export async function POST(req: NextRequest) {
     const eventType = event.type;
 
     switch (eventType) {
-        case 'checkout.session.completed':{
-            console.log(event)  
-        }
+      case "checkout.session.completed": {
+        const customerId  = event?.data?.object.client_reference_id
+        handleCheckoutSuccess(customerId!)
+        break;
+      }
     }
-    return new NextResponse("Successfully verified the event", {
+    return new NextResponse("Successfully recieved the event", {
       status: 200,
     });
   } catch (e: any) {

@@ -19,18 +19,18 @@ export async function POST(req: NextRequest) {
   console.log(event);
 
   const eventType = event.type;
-
   try {
     switch (eventType) {
       case "user.created": {
         const { id, first_name, last_name, email_addresses } = event.data;
-
+        const email_address =  email_addresses[0]?.email_address ?? ''
         await addUser({
           id,
           first_name: first_name ?? '',
           last_name: last_name ?? '',
-          email_addresses: email_addresses[0]?.email_address ?? '',
+          email_address,
         });
+        addUserToStripe(id, email_address) //to add the user in stripe as well
         break;
       }
 
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
           id,
           first_name: first_name ?? '',
           last_name: last_name ?? '',
-          email_addresses: email_addresses[0]?.email_address ?? '',
+          email_address: email_addresses[0]?.email_address ?? '',
         })
         break;
       }

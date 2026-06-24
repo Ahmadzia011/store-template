@@ -1,14 +1,15 @@
 "use server";
 
-import { getStripeKey } from "@/src/lib/stripeInstance";
 import { CANCELLATION_PAGE, CartItem, SUCCESS_PAGE } from "@/src/constants/products.constants";
+import { getStripe } from "@/src/lib/stripeInstance";
+import { auth } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 
 export async function getCheckOutUrl(
   cart: CartItem[],
   mode: Stripe.Checkout.SessionCreateParams.Mode,
 ) {
-
+    const {userId} = await auth()
     const line_items = cart.map((prod) => {
     const item: Stripe.Checkout.SessionCreateParams.LineItem = {
       price_data: {
@@ -33,12 +34,13 @@ export async function getCheckOutUrl(
 
 
   try {
-    const stripe = getStripeKey();
+    const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
       mode,
+      client_reference_id: userId!,
       success_url: SUCCESS_PAGE,
       cancel_url: CANCELLATION_PAGE,
     });

@@ -106,7 +106,7 @@ export default function Products({ products }: { products: Product[] }) {
                   </div>
 
                   {/* Secondary Color (#816FFA) applied natively via Tailwind arbitrary values */}
-                 {!isAdmin && ( <button
+                 {!isAdmin && isLoaded && ( <button
                     onClick={() => addToCart(item.name, item.price)}
                     style={{ backgroundColor: "#816FFA" }}
                     className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
