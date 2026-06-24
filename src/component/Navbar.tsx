@@ -1,8 +1,7 @@
-import { UserButton, useUser } from "@clerk/nextjs";
+import {  UserButton } from "@clerk/nextjs";
 
-export default function NavBar(){
+export default async function NavBar(){
 
-    const { isLoaded } = useUser()
     return(
 
       <nav className="w-full bg-white text-primary border-b mt-5 py-5 border-light sticky top-0 z-50 bg-white">
@@ -11,13 +10,12 @@ export default function NavBar(){
             <a href="/" className="transition-fast hover:text-accent">Scrapcher</a>
           </div>
           <div className="hidden md:flex gap-8 text-sm">
-            <a href="/products" className="transition-fast hover:text-accent">Products</a>
+            <a href="/shop" className="transition-fast hover:text-accent">Shop</a>
             <a href="/subscription" className="transition-fast hover:text-accent">Subscription</a>
             <a href="#testimonials" className="transition-fast hover:text-accent">Testimonials</a>
             <a href="#pricing" className="transition-fast hover:text-accent">Pricing</a>
-            
           </div>
-          <UserButton/>   
+          <UserButton/>
         </div>
       </nav>
     )

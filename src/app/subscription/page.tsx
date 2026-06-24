@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/src/component/Navbar";
 import { getCheckOutUrl } from "../actions/fetchCheckOut.actions";
 import { useState } from "react";
 import { PLANS, CartItem } from "@/src/constants/products.constants";
@@ -24,7 +23,6 @@ export default function Plans() {
 
   return (
     <>
-      <NavBar />
       <div className="w-full min-h-screen bg-white text-zinc-900 px-4 py-16">
         <div className="w-full max-w-6xl mx-auto">
           {/* Section Heading */}

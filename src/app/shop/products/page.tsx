@@ -1,11 +1,24 @@
 "use client";
 
-import NavBar from "@/src/component/Navbar";
-import { getCheckOutUrl } from "../actions/fetchCheckOut.actions";
 import { useState } from "react";
-import { CartItem, PRODUCTS } from "@/src/constants/products.constants";
+import { CartItem, Product } from "@/src/constants/products.constants";
+import { useUser } from "@clerk/nextjs";
+import { getCheckOutUrl } from "../../actions/fetchCheckOut.actions";
+import { addProduct } from "../../actions/addProduct.actions";
 
-export default function Products() {
+export default function Products({ products }: { products: Product[] }) {
+  //Here we will destruct the prop {products:PRODUCTS}, {products} with this we will extract it's value which is PRODUCTS and then add type annotation on this extracted value, that it is an array of Products
+
+  if (!products || products.length === 0) {
+    return <p className="text-zinc-500 text-center">No products found.</p>;
+  }
+
+  const {isLoaded} = useUser()
+
+  const isAdmin =
+    useUser().user?.organizationMemberships[0]?.roleName == "Admin";
+  console.log(isAdmin);
+
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = async (name: string, price: number) => {
@@ -28,7 +41,7 @@ export default function Products() {
   const handleBuy = async () => {
     console.log("clicked");
     try {
-      const checkOutUrl: string = await getCheckOutUrl(cart, 'payment');
+      const checkOutUrl: string = await getCheckOutUrl(cart, "payment");
 
       window.location.href = checkOutUrl;
     } catch (e) {
@@ -38,7 +51,6 @@ export default function Products() {
 
   return (
     <>
-      <NavBar />
       <div className="w-full min-h-screen bg-white text-zinc-900 px-4 py-16">
         <div className="w-full max-w-6xl mx-auto">
           {/* Section Heading */}
@@ -52,20 +64,20 @@ export default function Products() {
                 comfort.
               </p>
             </div>
-            <button
+           {isLoaded && (<button
               style={{ backgroundColor: "#816FFA" }}
               className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
-              onClick={handleBuy}
+              onClick={isAdmin ? addProduct : handleBuy}
             >
-              {cart.length} Items' CheckOut
-            </button>
+              {isAdmin ? `Add Products` : `${cart.length} Items' CheckOut`}
+            </button>)}
           </div>
 
-          {/* 3-Product Grid */}
+          {/* Product Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {PRODUCTS.map((product) => (
+            {products.map((item: Product) => (
               <div
-                key={product.id}
+                key={item.id}
                 className="flex flex-col justify-between bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-200"
               >
                 <div>
@@ -75,18 +87,18 @@ export default function Products() {
                   </div>
 
                   <h3 className="text-lg font-bold text-zinc-900 mb-1.5 group-hover:text-zinc-700">
-                    {product.name}
+                    {item.name}
                   </h3>
 
                   <p className="text-sm text-zinc-500 leading-relaxed mb-6 line-clamp-2">
-                    {product.description}
+                    {item.desc}
                   </p>
                 </div>
 
                 <div>
                   <div className="flex items-baseline mb-4">
                     <span className="text-2xl font-black text-zinc-900">
-                      ${product.price}
+                      ${item.price}
                     </span>
                     <span className="text-xs font-semibold text-zinc-400 ml-1.5 uppercase">
                       USD
@@ -94,13 +106,13 @@ export default function Products() {
                   </div>
 
                   {/* Secondary Color (#816FFA) applied natively via Tailwind arbitrary values */}
-                  <button
-                    onClick={() => addToCart(product.name, product.price)}
+                 {!isAdmin && ( <button
+                    onClick={() => addToCart(item.name, item.price)}
                     style={{ backgroundColor: "#816FFA" }}
                     className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
                   >
                     Add to Cart
-                  </button>
+                  </button>)}
                 </div>
               </div>
             ))}
