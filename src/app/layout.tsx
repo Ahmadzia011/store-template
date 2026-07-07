@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Scrapcher",
+  title: "Zyntra",
   description: "Your own AI assistant "
 };
 

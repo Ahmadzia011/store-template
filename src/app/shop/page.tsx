@@ -4,8 +4,14 @@ import { prisma } from "@/src/lib/prisma";
 
 export default async function Shop() {
 
-  const fetchedProducts = await prisma.product.findMany();
-  console.log(fetchedProducts)
+  let fetchedProducts;
+  try{
+   fetchedProducts = await prisma.product.findMany();
+  }
+  catch(e){
+    console.log('Error while fetching products.')
+    fetchedProducts = null
+  }
 
   return (
     <div>

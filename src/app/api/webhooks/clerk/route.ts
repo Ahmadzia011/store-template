@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
           last_name: last_name ?? '',
           email_address,
         });
-        addUserToStripe(id, email_address) //to add the user in stripe as well
         break;
       }
 

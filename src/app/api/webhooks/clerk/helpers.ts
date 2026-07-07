@@ -6,7 +6,7 @@ export const addUser = async (user: User) => {
     data: {
       id: user.id,
       name: user.first_name + " " + user.last_name,
-      email: user.email_addresses,
+      email: user.email_address,
     },
   });
   console.log("User added", userCreated);
@@ -18,7 +18,7 @@ export const updateUser = async (user: User) => {
     data: {
       id: user.id,
       name: user.first_name + " " + user.last_name,
-      email: user.email_addresses,
+      email: user.email_address,
     },
   });
   console.log('user updated')

@@ -6,43 +6,56 @@ import { useUser } from "@clerk/nextjs";
 import { getCheckOutUrl } from "../../actions/fetchCheckOut.actions";
 import { addProduct } from "../../actions/addProduct.actions";
 
-export default function Products({ products }: { products: Product[] }) {
+export default function Products({ products }: { products: Product[] | null}) {
   //Here we will destruct the prop {products:PRODUCTS}, {products} with this we will extract it's value which is PRODUCTS and then add type annotation on this extracted value, that it is an array of Products
 
-  if (!products || products.length === 0) {
-    return <p className="text-zinc-500 text-center">No products found.</p>;
-  }
-
-  const {isLoaded} = useUser()
+  const { isLoaded } = useUser();
 
   const isAdmin =
     useUser().user?.organizationMemberships[0]?.roleName == "Admin";
-  console.log(isAdmin);
 
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addToCart = async (name: string, price: number) => {
+  if (!products || products.length === 0) {
+  return ( <div className="min-h-screen flex flex-col justify-center items-center">
+            <p className="text-zinc-500 text-xl">No products found.</p>;
+            <button
+              style={{ backgroundColor: "#816FFA" }}
+              className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
+              onClick={addProduct}>
+                Add Product
+            </button>
+          </div>
+        )
+}
+
+  const addToCart = async (id: string) => {
     setCart((prevCart) => {
       // 1. Check if the product already exists in the previous state array
-      const existingProduct = prevCart.find((item) => item.name === name);
-
-      if (existingProduct) {
+      const existingProduct = prevCart.find((item) => item.id === id);
+      console.log('does exist', existingProduct)
+      if (existingProduct != null) {
+        console.log(prevCart)
         // 2. If it exists, return a NEW array with the target item's quantity incremented cleanly
         return prevCart.map((item) =>
-          item.name === name ? { ...item, quantity: item.quantity + 1 } : item,
+          item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
         );
       }
 
       // 3. If it's a completely new item, append it with quantity 1
-      return [...prevCart, { name, price, quantity: 1 }];
+      return [...prevCart, { id, quantity: 1 }];
     });
   };
 
   const handleBuy = async () => {
     console.log("clicked");
+
+    if(cart.length == 0){
+      alert('Please add products to cart first.')
+      return
+    }
     try {
       const checkOutUrl: string = await getCheckOutUrl(cart, "payment");
-
       window.location.href = checkOutUrl;
     } catch (e) {
       console.log("Error while fetching checkout page..");
@@ -64,13 +77,27 @@ export default function Products({ products }: { products: Product[] }) {
                 comfort.
               </p>
             </div>
-           {isLoaded && (<button
-              style={{ backgroundColor: "#816FFA" }}
-              className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
-              onClick={isAdmin ? addProduct : handleBuy}
-            >
-              {isAdmin ? `Add Products` : `${cart.length} Items' CheckOut`}
-            </button>)}
+            <div className="min-w-xs flex justify-between">
+            {isLoaded && (
+              <button
+                style={{ backgroundColor: "#816FFA" }}
+                className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
+                onClick={handleBuy}
+              >
+              {cart.length} Items' CheckOut
+              </button>
+            )}
+
+            {isLoaded && isAdmin && (
+              <button
+                style={{ backgroundColor: "#816FFA" }}
+                className="text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
+                onClick={addProduct}
+              >
+                Add Products
+              </button>
+            )}
+            </div>
           </div>
 
           {/* Product Grid */}
@@ -106,13 +133,15 @@ export default function Products({ products }: { products: Product[] }) {
                   </div>
 
                   {/* Secondary Color (#816FFA) applied natively via Tailwind arbitrary values */}
-                 {!isAdmin && isLoaded && ( <button
-                    onClick={() => addToCart(item.name, item.price)}
-                    style={{ backgroundColor: "#816FFA" }}
-                    className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
-                  >
-                    Add to Cart
-                  </button>)}
+                  { isLoaded && (
+                    <button
+                      onClick={() => addToCart(item.priceId)}
+                      style={{ backgroundColor: "#816FFA" }}
+                      className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer text-center text-sm shadow-sm hover:opacity-90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#816FFA] focus:ring-offset-2"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

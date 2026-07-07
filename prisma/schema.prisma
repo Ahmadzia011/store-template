@@ -15,22 +15,21 @@ model User {
   id    String @id
   email String
   name  String?
-  purchase Purchase[]
 }
 
 model Product {
+  id        String       @unique
+  name      String
+  desc      String
+  price     Float
+  priceId String
+}
+
+model Plan {
   id        Int        @id @default(autoincrement())
   name      String
   desc      String
   price     Float
-  purchases Purchase[]
+  credits   BigInt
 }
 
-model Purchase {
-  id        Int     @id @default(autoincrement())
-  product   Product? @relation(fields: [productId], references: [id])
-  productId Int?
-  customer User @relation(fields: [userId], references: [id])
-  userId String
-  timeStamp DateTime
-}
