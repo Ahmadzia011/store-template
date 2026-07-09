@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { CartItem, Product } from "@/src/constants/products.constants";
 import { useUser } from "@clerk/nextjs";
-import { getCheckOutUrl } from "../../actions/fetchCheckOut.actions";
-import { addProduct } from "../../actions/addProduct.actions";
+import { getCheckOutUrl } from "../../actions/checkOut.actions";
+import { addProduct } from "../../actions/products.actions";
 
 export default function Products({ products }: { products: Product[] | null}) {
   //Here we will destruct the prop {products:PRODUCTS}, {products} with this we will extract it's value which is PRODUCTS and then add type annotation on this extracted value, that it is an array of Products
@@ -64,7 +64,7 @@ export default function Products({ products }: { products: Product[] | null}) {
 
   return (
     <>
-      <div className="w-full min-h-screen bg-white text-zinc-900 px-4 py-16">
+      <div className=" w-full min-h-screen bg-white text-zinc-900 px-4 py-16">
         <div className="w-full max-w-6xl mx-auto">
           {/* Section Heading */}
           <div className="flex justify-between items-center">

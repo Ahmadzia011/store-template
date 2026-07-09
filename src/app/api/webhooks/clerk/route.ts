@@ -3,18 +3,17 @@ import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextRequest, NextResponse } from "next/server";
 import { addUser, deleteUser, updateUser } from "./helpers";
 
+
 export async function POST(req: NextRequest) {
   let event: WebhookEvent;
 
   try {
     event = await verifyWebhook(req);
   } catch (e: any) {
-    return (
-      new NextResponse("Failed to verify the coming request"),
+    return new NextResponse("Failed to verify the coming request",
       {
         status: 403,
-      }
-    );
+      });
   }
   console.log(event);
 

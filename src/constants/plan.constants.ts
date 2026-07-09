@@ -1,11 +1,9 @@
 export interface Plan {
   name: string;
-  id: number;
+  id: string;
   desc: string;
   price: number;
-  credits: bigint;
+  priceId: string
+  credits: number;
 }
 
-export interface PlanProp {
-    plans : Plan[]
-}

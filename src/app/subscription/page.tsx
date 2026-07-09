@@ -1,14 +1,24 @@
 
-import { getCheckOutUrl } from "../actions/fetchCheckOut.actions";
+import { getCheckOutUrl } from "../actions/checkOut.actions";
 import { prisma } from "@/src/lib/prisma";
 import Plans from "./plans/page";
+import NavBar from "@/src/component/UI/Navbar";
 
 export default async function subsPage() {
 
-  const fetchedPlans = await prisma.plan.findMany()
+  let fetchedPlans
+  try{
+     fetchedPlans = await prisma.plan.findMany()
+     console.log(fetchedPlans)
+  }
+  catch(e){
+    console.log('Error while fetching the plans..')
+    fetchedPlans = null
+  }
 
   return (
     <>
+    <NavBar/>
       <div className="w-full min-h-screen bg-white text-zinc-900 px-4 py-16">
         <div className="w-full max-w-6xl mx-auto">
           {/* Section Heading */}
@@ -23,9 +33,12 @@ export default async function subsPage() {
               </p>
             </div>
           </div>
-        <Plans plans={fetchedPlans} />
+          <Plans plans={fetchedPlans} />
         </div>
       </div>
     </>
   );
 }
+
+
+

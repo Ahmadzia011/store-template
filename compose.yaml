@@ -4,7 +4,7 @@ services:
     ports:
        - 32769:5432
     volumes:
-      - myvolume:/var/lib/postgresql
+      - myvolume:/var/lib/postgresql/data
 
     environment:
        POSTGRES_USER: ${DB_USER}

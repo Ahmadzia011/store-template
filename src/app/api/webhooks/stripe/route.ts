@@ -1,6 +1,5 @@
 import { getStripe } from "@/src/lib/stripeInstance";
 import { NextRequest, NextResponse } from "next/server";
-import { handleCheckoutSuccess } from "./helpers";
 
 export async function POST(req: NextRequest) {
   let stripe;
@@ -30,7 +29,6 @@ export async function POST(req: NextRequest) {
     switch (eventType) {
       case "checkout.session.completed": {
         const customerId  = event?.data?.object.client_reference_id
-        handleCheckoutSuccess(customerId!)
         break;
       }
     }

@@ -1,7 +1,9 @@
 import { User } from "@/src/constants/clerk.webhook.constants";
 import { prisma } from "@/src/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const addUser = async (user: User) => {
+
   const userCreated = await prisma.user.create({
     data: {
       id: user.id,
@@ -9,7 +11,8 @@ export const addUser = async (user: User) => {
       email: user.email_address,
     },
   });
-  console.log("User added", userCreated);
+  revalidatePath('/')
+  console.log("User added with free 20 credits.", userCreated);
 };
 
 export const updateUser = async (user: User) => {

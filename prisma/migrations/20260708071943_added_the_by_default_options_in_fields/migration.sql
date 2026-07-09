@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "credits" SET DEFAULT 20,
+ALTER COLUMN "freeUser" SET DEFAULT true;

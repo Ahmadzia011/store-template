@@ -1,4 +1,4 @@
-import NavBar from "@/src/component/Navbar";
+import NavBar from "@/src/component/UI/Navbar";
 import Products from "./products/page";
 import { prisma } from "@/src/lib/prisma";
 
