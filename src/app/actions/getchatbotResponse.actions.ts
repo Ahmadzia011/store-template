@@ -8,13 +8,12 @@ export async function getResponse(input:string) : Promise<ChatbotRespone> {
     
 
   const apiKey = process.env.GEMINI_API_KEY;
-  const url = `https://generativelanguage.googleis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-  if(!apiKey || !url ){
-    console.log(apiKey, url)
+  if(!apiKey ){
     return {
       success: false,
-      message: 'ApiKey or URL not loaded..'
+      message: 'ApiKey missing..'
     }
   }
   console.log(url)
@@ -29,9 +28,7 @@ export async function getResponse(input:string) : Promise<ChatbotRespone> {
   });
 
 
-  
   const data = await response.json();
-  console.log(data.candidates[0].content.parts[0].text)
   return {
     success: true,
     message: data.candidates[0].content.parts[0].text
